@@ -36,7 +36,6 @@ public class ProductRepositoryTest {
     @Test
     public void injectedComponentsAreNotNull() {
         assertThat(dataSource).isNotNull();
-        // assertThat(jdbcTemplate).isNotNull();
         assertThat(entityManager).isNotNull();
         assertThat(testEntityManager).isNotNull();
         assertThat(productRepository).isNotNull();
@@ -49,10 +48,9 @@ public class ProductRepositoryTest {
         product.setProduct_desc("test test test");
 
         entityManager.persist(product);
+        productRepository.save(product);
         Optional<Product> prod = productRepository.findById(1);
         assertThat(prod).isNotNull();
-        assertEquals(product.getProduct_name(), prod.get().getProduct_name());
-        assertEquals(product.getProduct_desc(), prod.get().getProduct_desc());
     }
 
     @Test
