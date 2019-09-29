@@ -20,8 +20,6 @@ import java.util.Optional;
  */
 @RestController
 public class ReviewsController {
-
-    // TODO: Wire JPA repositories here
     @Autowired
     ProductRepository productRepository;
     @Autowired
@@ -29,7 +27,6 @@ public class ReviewsController {
 
     /**
      * Creates a review for a product.
-     * <p>
      * 1. Add argument for review entity. Use {@link RequestBody} annotation.
      * 2. Check for existence of product.
      * 3. If product not found, return NOT_FOUND.

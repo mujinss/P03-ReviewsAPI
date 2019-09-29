@@ -25,8 +25,7 @@ import static org.junit.Assert.assertEquals;
 public class ProductRepositoryTest {
     @Autowired
     private DataSource dataSource;
-    /*@Autowired
-    private JdbcTemplate jdbcTemplate;*/
+
     @Autowired
     private EntityManager entityManager;
     @Autowired

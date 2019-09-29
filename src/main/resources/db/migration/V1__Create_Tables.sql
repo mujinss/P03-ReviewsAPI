@@ -1,10 +1,10 @@
-CREATE TABLE IF NOT EXISTS `product` (
+CREATE TABLE `product` (
     `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `product_name` varchar(100),
     `product_desc` varchar(500)
 );
 
-CREATE TABLE IF NOT EXISTS `review` (
+CREATE TABLE `review` (
     `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `review_username` varchar(20) NOT NULL,
     `review_title` varchar(20) NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `review` (
     `product_id` int NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS `comment` (
+CREATE TABLE `comment` (
     `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `review_id` int,
     `comment_txt` varchar(500),
