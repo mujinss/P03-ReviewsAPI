@@ -3,29 +3,32 @@ package com.udacity.course3.reviews.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
+import java.util.Optional;
 
 @Entity
 @Table(name = "comment")
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name="comment_id")
+    private Integer id;
 
     @ManyToOne
+    @JoinColumn(name="review_id")
     private Review review;
 
     @NotBlank
     @Column(name="comment_txt")
     private String commentTxt;
 
-    @Column(name="created")
+    @Column(name="created", columnDefinition="timestamp default current_timestamp")
     private Date created;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -7,7 +7,8 @@ import javax.validation.constraints.NotBlank;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name="product_id")
+    private Integer id;
 
     @NotBlank
     @Column(name="product_name")
@@ -17,11 +18,11 @@ public class Product {
     private String product_desc;
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -8,10 +8,11 @@ import java.util.Date;
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name="review_id")
+    private Integer id;
 
     @NotBlank
-    @Column(name="review_name")
+    @Column(name="review_username")
     private String reviewUsername;
 
     @NotBlank
@@ -22,18 +23,18 @@ public class Review {
     @Column(name="review_txt")
     private String reviewTxt;
 
-    @Column(name="created")
+    @Column(name="created", columnDefinition="timestamp default current_timestamp")
     private Date created;
 
-    @NotBlank
     @ManyToOne
+    @JoinColumn(name="product_id")
     private Product product;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
