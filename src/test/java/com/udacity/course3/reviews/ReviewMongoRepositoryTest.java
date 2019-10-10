@@ -36,30 +36,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @DataMongoTest
 @ExtendWith(SpringExtension.class)
 public class ReviewMongoRepositoryTest {
-/*    @Autowired
-    private ReviewMongoRepository reviewMongoRepository;
-    @Autowired
-    private DataSource dataSource;
 
-    @Autowired
-    private EntityManager entityManager;
-    @Autowired
-    private ProductRepository productRepository;*/
-
-/*    private static Product product = new Product();
-
-    public void productSetup() {
-        product.setProduct_name("a new product");
-        product.setProduct_desc("test test test");
-        entityManager.persist(product);
-        productRepository.save(product);
-    }*/
 
     @Test
     public void createReviewWithComments(@Autowired MongoTemplate mongoTemplate) {
- /*       Product product = new Product();
-        product.setProduct_name("a new product");
-        product.setProduct_desc("test test test");*/
         ReviewMongo review = new ReviewMongo();
         review.setProductId("1");
         review.set_id(1);
