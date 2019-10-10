@@ -2,7 +2,9 @@ package com.udacity.course3.reviews.controller;
 
 import com.udacity.course3.reviews.entity.Comment;
 import com.udacity.course3.reviews.entity.Review;
+import com.udacity.course3.reviews.entity.ReviewMongo;
 import com.udacity.course3.reviews.repository.CommentRepository;
+import com.udacity.course3.reviews.repository.ReviewMongoRepository;
 import com.udacity.course3.reviews.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpServerErrorException;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +28,8 @@ public class CommentsController {
     CommentRepository commentRepository;
     @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
+    private ReviewMongoRepository reviewMongoRepository;
 
     public CommentsController(ReviewRepository reviewRepository, CommentRepository commentRepository) {
         this.reviewRepository = reviewRepository;
@@ -44,12 +49,16 @@ public class CommentsController {
     @RequestMapping(value = "/reviews/{reviewId}", method = RequestMethod.POST)
     public ResponseEntity<Comment> createCommentForReview(@PathVariable("reviewId") Integer reviewId,
                                                     @RequestBody Comment comment) {
-        // throw new HttpServerErrorException(HttpStatus.NOT_IMPLEMENTED);
-        // Optional<Review> optional = reviewRepository.findById(reviewId);
+
         Optional<Review> review = reviewRepository.findById(reviewId);
         if(review.isPresent()) {
             comment.setReview(review.get());
             comment.setCreated(new Date());
+            ReviewMongo reviewMongo = reviewMongoRepository.findBy_id(reviewId.toString());
+            ArrayList<Comment> comments = reviewMongo.getComments();
+            comments.add(comment);
+            reviewMongo.setComments(comments);
+            reviewMongoRepository.save(reviewMongo);
             return ResponseEntity.ok(commentRepository.save(comment));
         } else {
             return ResponseEntity.notFound().build();

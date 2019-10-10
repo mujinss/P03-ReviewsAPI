@@ -2,7 +2,9 @@ package com.udacity.course3.reviews.controller;
 
 import com.udacity.course3.reviews.entity.Product;
 import com.udacity.course3.reviews.entity.Review;
+import com.udacity.course3.reviews.entity.ReviewMongo;
 import com.udacity.course3.reviews.repository.ProductRepository;
+import com.udacity.course3.reviews.repository.ReviewMongoRepository;
 import com.udacity.course3.reviews.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import java.security.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -24,6 +27,8 @@ public class ReviewsController {
     ProductRepository productRepository;
     @Autowired
     ReviewRepository reviewRepository;
+    @Autowired
+    ReviewMongoRepository reviewMongoRepository;
 
     /**
      * Creates a review for a product.
@@ -42,7 +47,15 @@ public class ReviewsController {
         if(product.isPresent()) {
             review.setProduct(product.get());
             review.setCreated(new Date());
-            return ResponseEntity.ok(reviewRepository.save(review));
+            ReviewMongo review_to_save = new ReviewMongo();
+            Review review_sql_saved = reviewRepository.save(review);
+            review_to_save.set_id(review_sql_saved.getId());
+            review_to_save.setProductId(productId.toString());
+            review_to_save.setCreated(review_sql_saved.getCreated());
+            review_to_save.setReviewUsername(review_sql_saved.getReviewUsername());
+            review_to_save.setReviewTitle(review_sql_saved.getReviewTitle());
+            review_to_save.setReviewTxt(review_sql_saved.getReviewTxt());
+            return ResponseEntity.ok(review_sql_saved);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -55,12 +68,22 @@ public class ReviewsController {
      * @return The list of reviews.
      */
     @RequestMapping(value = "/reviews/products/{productId}", method = RequestMethod.GET)
-    public ResponseEntity<List<Review>> listReviewsForProduct(@PathVariable("productId") Integer productId) {
+    public ResponseEntity<List<ReviewMongo>> listReviewsForProduct(@PathVariable("productId") Integer productId) {
         Optional<Product> product = productRepository.findById(productId);
-        if(product.isPresent()) {
+       /* if(product.isPresent()) {
             return ResponseEntity.ok(reviewRepository.findAllByProduct(product.get()));
         } else {
             return ResponseEntity.notFound().build();
-        }
+        }*/
+       List<ReviewMongo> res = null;
+       if(product.isPresent()) {
+           for (Review review : reviewRepository.findAllByProduct(product.get())) {
+               res.add(reviewMongoRepository.findBy_id(review.getId().toString()));
+           }
+           return ResponseEntity.ok(res);
+       } else {
+           return ResponseEntity.notFound().build();
+       }
     }
+
 }
