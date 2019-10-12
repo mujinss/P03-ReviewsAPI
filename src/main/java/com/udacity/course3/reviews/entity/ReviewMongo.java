@@ -23,7 +23,7 @@ public class ReviewMongo {
 
     private Date created;
 
-    private ArrayList<Comment> comments;
+    private ArrayList<Comment> comments = new ArrayList<Comment>();
 
     public ReviewMongo() {}
 
@@ -34,7 +34,7 @@ public class ReviewMongo {
         this.reviewTitle = reviewTitle;
         this.reviewTxt = reviewTxt;
         this.created = created;
-        this.comments = comments;
+        this.comments = comments.isEmpty() ? comments : new ArrayList<Comment>();
     }
 
     public String getReviewUsername() {

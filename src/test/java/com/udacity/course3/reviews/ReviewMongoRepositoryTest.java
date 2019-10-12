@@ -57,7 +57,7 @@ public class ReviewMongoRepositoryTest {
         comments.add(comment1);
         comments.add(comment2);
         review.setComments(comments);
-        // reviewMongoRepository.save(review);
+
         // given
         DBObject objectToSave = BasicDBObjectBuilder.start()
                 .add("_id", review.get_id())

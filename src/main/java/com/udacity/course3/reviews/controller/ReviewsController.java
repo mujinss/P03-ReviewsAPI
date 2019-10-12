@@ -7,16 +7,11 @@ import com.udacity.course3.reviews.repository.ProductRepository;
 import com.udacity.course3.reviews.repository.ReviewMongoRepository;
 import com.udacity.course3.reviews.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpServerErrorException;
 
-import java.security.Timestamp;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Spring REST controller for working with review entity.
@@ -55,6 +50,7 @@ public class ReviewsController {
             review_to_save.setReviewUsername(review_sql_saved.getReviewUsername());
             review_to_save.setReviewTitle(review_sql_saved.getReviewTitle());
             review_to_save.setReviewTxt(review_sql_saved.getReviewTxt());
+            reviewMongoRepository.save(review_to_save);
             return ResponseEntity.ok(review_sql_saved);
         } else {
             return ResponseEntity.notFound().build();
@@ -70,15 +66,11 @@ public class ReviewsController {
     @RequestMapping(value = "/reviews/products/{productId}", method = RequestMethod.GET)
     public ResponseEntity<List<ReviewMongo>> listReviewsForProduct(@PathVariable("productId") Integer productId) {
         Optional<Product> product = productRepository.findById(productId);
-       /* if(product.isPresent()) {
-            return ResponseEntity.ok(reviewRepository.findAllByProduct(product.get()));
-        } else {
-            return ResponseEntity.notFound().build();
-        }*/
-       List<ReviewMongo> res = null;
+
+       ArrayList<ReviewMongo> res = new ArrayList<ReviewMongo>();
        if(product.isPresent()) {
            for (Review review : reviewRepository.findAllByProduct(product.get())) {
-               res.add(reviewMongoRepository.findBy_id(review.getId().toString()));
+               res.add(reviewMongoRepository.findBy_id(review.getId()));
            }
            return ResponseEntity.ok(res);
        } else {

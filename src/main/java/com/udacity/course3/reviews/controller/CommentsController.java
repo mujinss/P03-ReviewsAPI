@@ -31,9 +31,11 @@ public class CommentsController {
     @Autowired
     private ReviewMongoRepository reviewMongoRepository;
 
-    public CommentsController(ReviewRepository reviewRepository, CommentRepository commentRepository) {
+    public CommentsController(ReviewRepository reviewRepository, CommentRepository commentRepository,
+                              ReviewMongoRepository reviewMongoRepository) {
         this.reviewRepository = reviewRepository;
         this.commentRepository = commentRepository;
+        this.reviewMongoRepository = reviewMongoRepository;
     }
 
     /**
@@ -54,9 +56,13 @@ public class CommentsController {
         if(review.isPresent()) {
             comment.setReview(review.get());
             comment.setCreated(new Date());
-            ReviewMongo reviewMongo = reviewMongoRepository.findBy_id(reviewId.toString());
+            ReviewMongo reviewMongo = reviewMongoRepository.findBy_id(reviewId);
             ArrayList<Comment> comments = reviewMongo.getComments();
-            comments.add(comment);
+            if (comments != null) {
+                comments.add(comment);
+            } else {
+                comments = new ArrayList<Comment>();
+            }
             reviewMongo.setComments(comments);
             reviewMongoRepository.save(reviewMongo);
             return ResponseEntity.ok(commentRepository.save(comment));
